@@ -13,10 +13,14 @@ and open the template in the editor.
     <body>
         <h1>A TODO LIST</h1>
 <?php
+require_once 'helpers.php';
+
 $servername = "localhost";
 $username = "root";
 $password = "Skule123";
 $dbname = "TODO";
+
+$id = $label = $description = $category = $active = $closing = "";
 
 //Create the DATABASE:
 //createDB($servername, $username, $password, $dbname);
@@ -36,7 +40,6 @@ $dbname = "TODO";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $label = $description = $category = $active = "";
     $labelErr = "";
 
     $label = test_input($_POST["label"]);
@@ -66,51 +69,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
+    //lets handle some get requests. Mode can be either edit, to update or delete. 
+    //Lets say no mode implies Read only. Mode implies edit or delete, which requires id.
+    $read_only = $id = $mode = "";
+    if($_GET['mode'] && !$_GET['id']){
+        echo "Bad request. Need id of entry.";
+    } elseif($_GET['mode'] == 'edit'){
+        $item_id = test_input($_GET['id']);
+        
+        if($item_id){
+            $sql = "SELECT * FROM todos WHERE id='$item_id'";
+            
+                    $conn = new mysqli($servername, $username, $password,$dbname);
+                    if($conn->connect_error){
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+            
+                    echo "sql: <br/>".$sql;
+                    
+                    $query_set = $conn->query($sql);
+                    if($query_set->num_rows > 0){
+                        $row = $query_set->fetch_assoc();
+                        $id = $row['id'];
+                        $label = $row['label'];
+                        $description = $row['description'];
+                        $category = $row['category'];
+                        $active = $row['active'];
+                        $closing = $row['closing'];
+                    } else {
+                        echo "Query appears to return empty result.";
+                    }
+                    
 
-}
+                    $conn->close();
 
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-function createModel($name, $user, $pass, $db, $model_name, $model)
-{
-    $sql = "CREATE TABLE ${model_name} (" . implode(", ", $model) . ")";
+        } else {
+            echo "Not a valid item ID.";
+        }
+        
+    }
 
-    $conn = new mysqli($name, $user, $pass, $db);
-    if ($conn->query($sql) === true) {
-        echo "Table was made.";
-    } else {
-        echo "An error occured: " . $conn->error;
-    }
-}
-function createDB($name, $user, $pass, $db)
-{
-    $conn = new mysqli($name, $user, $pass);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $sql = "CREATE DATABASE IF NOT EXISTS " . $db;
-    if ($conn->query($sql) === true) {
-        echo "Database ready.";
-    } else {
-        echo "An error occured: " . $conn->error;
-    }
 }?>
     <div>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
+        <?php if($id) {
+            echo 'ID:<br/>
+                <input type="text" name="ID" value="'.$id.'" readonly><br/>';
+        }?>
         Label:<br/>
-        <input type="text" name="label" value=""><br/>
+        <input type="text" name="label" value="<?php echo $label?>"><br/>
         Description:<br/>
-        <textarea name="description" rows="5" columns="50"></textarea><br/>
+        <textarea name="description" rows="5" columns="50"><?php echo $description?></textarea><br/>
         <div class=container>
         Category:<br>
         <select name="category">
-            <option value="TODO">TODO</option>
-            <option value="Other">Other</option>
+            <option value="TODO" <?php if($category == "TODO") echo selected?>>TODO</option>
+            <option value="Other" <?php if($category == "Other") echo selected?>>Other</option>
         </select><br>
         Renew:<br>
         <input type="radio" name="renew" value="renew" checked>Renew
@@ -123,7 +137,7 @@ function createDB($name, $user, $pass, $db)
     </div>
     <?php
 // make a list of the query_set gathered
-$sql = "SELECT * FROM todos";
+$sql = "SELECT * FROM todos WHERE active='1'";
 $conn = new mysqli($servername, $username, $password, $dbname);
 $query_set = $conn->query($sql);
 if ($query_set->num_rows > 0) {
@@ -149,8 +163,8 @@ if ($query_set->num_rows > 0) {
         } else {
             echo "<td>FALSE</td>";
         }
-        echo "<td><a href=close.php?id=" . $row[id] . ">CLOSE</a></td>";
-        echo "<td><a href=edit.php?id=" . $row[id] . ">EDIT</a></td>";
+        echo "<td><a href=".htmlspecialchars($_SERVER["PHP_SELF"])."?id=" . $row[id] . "&mode=close>CLOSE</a></td>";
+        echo "<td><a href=".htmlspecialchars($_SERVER["PHP_SELF"])."?id=" . $row[id] . "&mode=edit>EDIT</a></td>";
         echo "</tr>";
 
     }

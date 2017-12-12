@@ -9,8 +9,25 @@
 <meta name="keywords" content="">
 <link href="static/style.css" rel="stylesheet">
 </head>
-
-<?php
-
-?>
+<div>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
+        Label:<br/>
+        <input type="text" name="label" value=""><br/>
+        Description:<br/>
+        <textarea name="description" rows="5" columns="50" readonly></textarea><br/>
+        <div class=container>
+        Category:<br>
+        <select name="category">
+            <option value="TODO">TODO</option>
+            <option value="Other">Other</option>
+        </select><br>
+        Renew:<br>
+        <input type="radio" name="renew" value="renew" checked>Renew
+        <input type="radio" name="renew" value="closed">Closed<br/>
+        </div>
+        Closing Comment<br/>
+        <textarea name="closing" rows="5" columns="50"></textarea><br/>
+        <input type="submit" value="Submit" name="submit">
+    </form>
+    </div>
 </html>
