@@ -1,0 +1,25 @@
+body{
+    background-color: rgb(147, 152, 104);
+    
+}
+
+#io_frame {
+    background-color: rgb(49, 86, 49);
+    
+}
+
+h5{
+    color: #f9f9f9;
+}
+
+#table_frame th{
+    color:#42afaf;
+}
+
+#table_frame {
+    background-color: rgb(37, 66, 101);
+
+}
+.input-field label {
+    pointer-events: auto;
+    }
