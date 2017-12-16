@@ -380,11 +380,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         while ($row = $query_set->fetch_assoc()) {
             echo 
             '
+    <div class="row card-panel teal lighten-2">
         <div class="container col s10">';
             echo 
             '
               <div class="row">
-                <div class="col s6"><strong>Label:</strong> ' . $row[label] . '</div>
+                <div class="col s8"><strong>Label:</strong> ' . $row[label] . '</div>
                 <div class="col s4 right"><strong>Category:</strong> ' . $row[category] . '</div>
               </div>';
             echo             
@@ -398,15 +399,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container col s2">';
             echo 
             '
-            <div class="row s1">
+            <div class="row s2">
               <a class="btn center" href='.htmlspecialchars($_SERVER["PHP_SELF"]).'?id=' . $row[id] . '&mode=close>CLOSE</a>
             </div>';
             echo 
             '
-            <div class="row s1">
+            <div class="row s2">
               <a class="btn center" href='.htmlspecialchars($_SERVER["PHP_SELF"]).'?id=' . $row[id] . '&mode=edit>EDIT</a>
             </div>
-        </div>';
+        </div>
+    </div>
+';
         
         }
         
@@ -424,8 +427,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $('select').material_select();
     });
     </script>
-    </div>
 </body>
-
 
 </html>
