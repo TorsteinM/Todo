@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_html =
             '
             <div class="input-field col s6 ">
-              <input name="id" type="text" class="validate" value="'.$id.'" readonly>
+              <input name="id" id="id" type="text" class="validate" value="'.$id.'" readonly>
               <label for="id">ID</label>
             </div>
             ';
@@ -172,7 +172,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_html = 
                 '
                 <div class="input-field col s6">
-                    <input type="checkbox" class="filled-in" name="active" checked="checked" />
+                    <input type="checkbox" class="filled-in" id="active" name="active" checked="checked" />
                     <label for="active">Active</span>
                   </label>
                 </div>
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_html = 
                 '
                 <div class="input-field col s6">
-                    <input type="checkbox" class="filled-in" name="active" />
+                    <input type="checkbox" id="active" class="filled-in" name="active" />
                     <label for="active">Active</span>
                   </label>
                 </div>
@@ -192,7 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $label_html =
             '
             <div class="input-field col s6">
-              <input name="label" type="text" class="validate" value="'.$label.'">
+              <input name="label" id="label" type="text" class="validate" value="'.$label.'">
               <label for="label">Label</label>
             </div>
             ';
@@ -209,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $description_html =
             '
             <div class="input-field col s12">
-              <textarea name="description" class="materialize-textarea">'.$description.'</textarea>
+              <textarea name="description" id="description" class="materialize-textarea">'.$description.'</textarea>
               <label for="description">Description</label>
             </div>
             ';
@@ -342,30 +342,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }?>
     <a href="/" class="center"><h1>A TODO LIST</h1></a>
     <div class="container row">
-      <div id="io_frame" class="container col s4">
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
-    <?php
-    echo '
-        <div class="row">' . $title . '
-        </div>';
-    echo '
-        <div class="row">' . $label_html . $category_html . '
-        </div>';
-    echo '
-        <div class="row">' . $id_html . $active_html . '
-        </div>';
-    echo '
-        <div class="row">' . $description_html . '
-        </div>';
-    echo '
-        <div class="row">' . $closing_html . '
-        </div>';
-    echo '
-        <div class="row">' . $submit_html . '
-        </div>';
-    ?>
-        </form>
-      </div>
+      
       <div id="table_frame" class="container col s8">
     <?php
     // make a list of the query_set gathered
@@ -419,6 +396,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
     ?> 
         </div>
+        <div id="io_frame" class="container col s4">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
+    <?php
+    echo '
+        <div class="row">' . $title . '
+        </div>';
+    echo '
+        <div class="row">' . $label_html . $category_html . '
+        </div>';
+    echo '
+        <div class="row">' . $id_html . $active_html . '
+        </div>';
+    echo '
+        <div class="row">' . $description_html . '
+        </div>';
+    echo '
+        <div class="row">' . $closing_html . '
+        </div>';
+    echo '
+        <div class="row">' . $submit_html . '
+        </div>';
+    ?>
+        </form>
+      </div>
       </div>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
